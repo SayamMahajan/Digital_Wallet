@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import UserDetails from '../components/User/UserDetails';
-import NewTransaction from '../components/Transactions/NewTransaction';
-import TransactionList from '../components/Transactions/TransactionList';
+import { AuthContext } from '../context/AuthContext.jsx';
+import UserDetails from '../components/User/UserDetails.jsx';
+import NewTransaction from '../components/Transactions/NewTransaction.jsx';
+import TransactionList from '../components/Transactions/TransactionList.jsx';
 import "./Dashboard.css";
 
 const Dashboard = () => {

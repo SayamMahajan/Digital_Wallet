@@ -1,6 +1,6 @@
 import React from 'react';
-import Login from '../components/Auth/Login';
-import Signup from '../components/Auth/Signup';
+import Login from '../components/Auth/Login.jsx';
+import Signup from '../components/Auth/Signup.jsx';
 import "./Home.css";
 
 const Home = () => {

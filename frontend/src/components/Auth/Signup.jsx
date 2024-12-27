@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signupUser } from '../../utils/api';
+import { signupUser } from '../../utils/api.jsx';
 import "./Signup.css";
 
 const Signup = () => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createTransaction } from '../../utils/api';
+import { createTransaction } from '../../utils/api.jsx';
 import "./NewTransaction.css";
 
 const NewTransaction = () => {

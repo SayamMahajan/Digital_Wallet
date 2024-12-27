@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../context/AuthContext';
-import { fetchUserDetails } from '../../utils/api';
+import { AuthContext } from '../../context/AuthContext.jsx';
+import { fetchUserDetails } from '../../utils/api.jsx';
 import "./UserDetails.css";
 
 const UserDetails = () => {

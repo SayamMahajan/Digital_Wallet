@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchTransactions } from '../../utils/api';
+import { fetchTransactions } from '../../utils/api.jsx';
 import "./TransactionList.css";
 
 const TransactionList = () => {
