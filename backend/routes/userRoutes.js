@@ -1,8 +1,11 @@
 import express from 'express';
 import { getUserDetails } from '../controllers/userController.js';
+import { verifyToken } from "../middlewares/authentication.js";
 
 const router = express.Router();
 
-router.get('/:upi_id', getUserDetails);
+router.get('/profile', verifyToken, getUserDetails);
+
+router.put('/profile', verifyToken, updateUserDetails);
 
 export default router;

@@ -11,13 +11,9 @@ export const sendVerificationEmail = async (email, verificationToken) => {
     });
 
     if (error) {
-      console.error("Resend API Error (Verification Email):", error);
       throw new Error("Failed to send verification email");
     }
-
-    console.log("Verification email sent successfully:", data);
   } catch (error) {
-    console.error("Error sending verification email:", error.message);
     throw error;
   }
 };
@@ -32,13 +28,10 @@ export const sendConfirmationEmail = async (email, name) => {
     });
 
     if (error) {
-      console.error("Resend API Error (Confirmation Email):", error);
       throw new Error("Failed to send confirmation email");
     }
 
-    console.log("Confirmation email sent successfully:", data);
   } catch (error) {
-    console.error("Error sending confirmation email:", error.message);
     throw error;
   }
 };
@@ -53,13 +46,10 @@ export const sendResetPasswordEmail = async (email, resetURL) => {
     });
 
     if (error) {
-      console.error("Resend API Error (Reset Password Email):", error);
       throw new Error("Failed to send reset password email");
     }
 
-    console.log("Reset password email sent successfully:", data);
   } catch (error) {
-    console.error("Error sending reset password email:", error.message);
     throw error;
   }
 };
@@ -74,13 +64,10 @@ export const sendResetPasswordSuccessEmail = async (email) => {
     });
 
     if (error) {
-      console.error("Resend API Error (Reset Password Success Email):", error);
       throw new Error("Failed to send reset password success email");
     }
 
-    console.log("Reset password success email sent successfully:", data);
   } catch (error) {
-    console.error("Error sending reset password success email:", error.message);
     throw error;
   }
 };
