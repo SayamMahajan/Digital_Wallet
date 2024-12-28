@@ -1,0 +1,116 @@
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #BBE1FA;
+}
+
+.split-container {
+  display: flex;
+  width: 80%;
+  max-width: 1200px;
+  background-color: #3282B8; /* Updated color */
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  height: 600px;
+}
+
+.image-container {
+  flex: 1;
+  background-image: url('../../../public/images/LoginImage.avif');
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px 0 0 10px;
+}
+
+.signup-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.signup-container form {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 30px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(32, 48, 58, 0.549);
+  -webkit-backdrop-filter: blur(8.5px);
+  backdrop-filter: blur(8.5px);
+}
+
+/* Signup heading */
+.signup-container h1 {
+  font-size: 24px;
+  color: #0F4C75; /* Updated color */
+  margin-bottom: 60px;
+}
+
+/* Input fields */
+.signup-container input {
+  width: 100%;
+  padding: 10px 15px;
+  margin-bottom: 30px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.3s;
+  color: #000000;
+  background-color: #BBE1FA; /* Updated color */
+}
+
+.signup-container input:focus {
+  border-color: #3282B8; /* Updated color */
+}
+
+.signup-container button {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 18px;
+  color: #fff;
+  background-color: #3282B8; /* Updated color */
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.signup-container button:hover {
+  background-color: #1B262C; /* Updated color */
+}
+
+.login-link {
+  display: block;
+  margin-top: 10px;
+  text-align: right;
+  color: #0F4C75; /* Updated color */
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+  color: #1B262C; /* Updated color */
+}
+
+@media (max-width: 768px) {
+  .split-container {
+    flex-direction: column;
+    width: 90%;
+    height: auto;
+  }
+  .image-container {
+    height: 300px;
+  }
+  .signup-container {
+    padding: 15px;
+  }
+}

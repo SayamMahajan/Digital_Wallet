@@ -143,6 +143,35 @@ export const resetPassword = async (req, res) => {
   }
 }
 
+export const resendVerificationToken = async (req, res) => {
+  const { email } = req.body;
+  try {
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({ message: "Email is already verified" });
+    }
+
+    const newVerificationToken = generateVerificationToken();
+    user.verificationToken = newVerificationToken;
+    user.verificationTokenExpiresAt = Date.now() + 24 * 60 * 60 * 1000;
+
+    await user.save();
+    await sendVerificationEmail(user.email, newVerificationToken);
+
+    return res.status(200).json({ message: "New verification token sent to your email" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export const checkAuth = async (req, res) => {
   try {
     const user = await User.findById(req.userId);

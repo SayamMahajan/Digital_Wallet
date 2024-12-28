@@ -1,6 +1,7 @@
 import express from 'express';
 import connectMongo from './config/db.js';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import 'dotenv/config';
 import authRoutes from './routes/authRoutes.js';
@@ -10,8 +11,14 @@ import transactionRoutes from './routes/transactionRoutes.js';
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors(
+  { 
+    allowedHeaders: ['Content-Type', 'Authorization', 'withCredentials'], 
+    credentials: true,
+  }
+));
 app.use(express.json());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Database connection
