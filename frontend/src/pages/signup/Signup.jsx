@@ -14,7 +14,7 @@ const Signup = () => {
     e.preventDefault();
     setLoading(true); 
     try {
-      const response = await axiosInstance.post('/signup', { name, email, password });
+      const response = await axiosInstance.post('/api/auth/signup', { name, email, password });
       if (response.data.success) {
         alert('Signup successful. Please verify your email.');
         navigate('/verify-email'); 
@@ -30,47 +30,49 @@ const Signup = () => {
   return (
     <div className="main-container">
       <div className="split-container">
-        <div className="image-container"></div>
+        <div className="signup-image-container"></div>
 
         <div className="signup-container">
           <form onSubmit={handleSubmit}>
-            
             <h1>Signup</h1>
             <input
-              id="name"
+              id="signup-name" // Add this line
+              name="name" // Add this line
               type="text"
               placeholder="Enter your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              autoComplete="name"
             />
-
             <input
-              id="email"
+              id="signup-email" // Add this line
+              name="email" // Add this line
               type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="email"
             />
-
             <input
-              id="password"
+              id="signup-password" // Add this line
+              name="password" // Add this line
               type="password"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete="new-password"
             />
-
             <button type="submit" disabled={loading}>
               {loading ? 'Signing up...' : 'Signup'}
             </button>
-
             <a href="/login" className="login-link">
               Already have an account? Login
             </a>
           </form>
+
         </div>
       </div>
     </div>

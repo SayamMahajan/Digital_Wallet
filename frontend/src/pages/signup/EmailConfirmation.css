@@ -3,29 +3,30 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #86c6f0;
+  background-color: #86c6f0; /* Similar to signup */
 }
 
 .split-container {
   display: flex;
   width: 80%;
   max-width: 1200px;
-  background-color: #3282B8; /* Updated color */
+  background-color: #3282B8; 
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   height: 600px;
 }
 
-.signup-image-container {
+/* Image container */
+.email-confirmation-image-container {
   flex: 1;
-  background-image: url('/images/SignupImage.png');
+  background-image: url('/images/EmailConfirmationImage.jpg'); 
   background-size: cover;
   background-position: center;
   border-radius: 10px 0 0 10px;
 }
 
-.signup-container {
+.email-confirmation-container {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -33,7 +34,7 @@
   padding: 20px;
 }
 
-.signup-container form {
+.email-confirmation-container form {
   width: 100%;
   max-width: 400px;
   text-align: center;
@@ -46,15 +47,19 @@
   backdrop-filter: blur(8.5px);
 }
 
-/* Signup heading */
-.signup-container h1 {
+.email-confirmation-container h1 {
   font-size: 24px;
-  color: #0F4C75; /* Updated color */
-  margin-bottom: 60px;
+  color: #0F4C75;
+  margin-bottom: 20px;
 }
 
-/* Input fields */
-.signup-container input {
+.email-confirmation-container p {
+  font-size: 14px;
+  color: #0F4C75;
+  margin-bottom: 20px;
+}
+
+.email-confirmation-container input {
   width: 100%;
   padding: 10px 15px;
   margin-bottom: 30px;
@@ -66,40 +71,27 @@
   transition: border-color 0.3s;
   color: #000000;
   background-color: #eaf0fe;
+  text-align: center; /* Center-align text for OTP */
 }
 
-.signup-container input:focus {
-  border-color: #3282B8; /* Updated color */
+.email-confirmation-container input:focus {
+  border-color: #3282B8;
 }
 
-.signup-container button {
+.email-confirmation-container button {
   width: 100%;
   padding: 10px 15px;
   font-size: 18px;
   color: #fff;
-  background-color: #3282B8; /* Updated color */
+  background-color: #3282B8;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.signup-container button:hover {
-  background-color: #1B262C; /* Updated color */
+.email-confirmation-container button:hover {
+  background-color: #1B262C;
   color: #BBE1FA;
-}
-
-.login-link {
-  display: block;
-  margin-top: 10px;
-  text-align: right;
-  color: #0F4C75; /* Updated color */
-  text-decoration: none;
-  font-size: 0.9rem;
-}
-
-.login-link:hover {
-  text-decoration: underline;
-  color: #1B262C; /* Updated color */
 }
 
 @media (max-width: 768px) {
@@ -108,10 +100,10 @@
     width: 90%;
     height: auto;
   }
-  .image-container {
+  .email-confirmation-image-container {
     height: 300px;
   }
-  .signup-container {
+  .email-confirmation-container {
     padding: 15px;
   }
 }

@@ -17,7 +17,14 @@
   height: 600px;
 }
 
-.login-container {
+.new-otp-image-container {
+  flex: 1;
+  background-image: url('/images/NewOtpImage.jpg'); 
+  background-size: cover;
+  background-position: center;
+}
+
+.new-otp-container {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -25,7 +32,7 @@
   padding: 20px;
 }
 
-.login-container form {
+.new-otp-container form {
   width: 100%;
   max-width: 400px;
   text-align: center;
@@ -36,16 +43,15 @@
   box-shadow: 0 8px 32px 0 rgba(32, 48, 58, 0.549);
   -webkit-backdrop-filter: blur(3.5px);
   backdrop-filter: blur(3.5px);
-  height: 400px;
 }
 
-.login-container h1 {
+.new-otp-container h1 {
   font-size: 28px;
   color: #0F4C75;
   margin-bottom: 60px;
 }
 
-.login-container input {
+.new-otp-container input {
   width: 100%;
   padding: 10px 15px;
   margin-bottom: 35px;
@@ -59,11 +65,7 @@
   background-color: #eaf0fe;
 }
 
-.login-container input:focus {
-  border-color: #3282B8;
-}
-
-.login-container button {
+.new-otp-container button {
   width: 100%;
   padding: 10px 15px;
   font-size: 18px;
@@ -74,61 +76,7 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
-.login-container button:hover {
+.new-otp-container button:hover {
   background-color: #1B262C;
   color: #BBE1FA;
-}
-
-.forgot-password-link {
-  display: block;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  text-align: right;
-  color: #0F4C75;
-  text-decoration: none;
-  font-size: 0.9rem;
-}
-
-.forgot-password-link:hover {
-  text-decoration: underline;
-  color: #1B262C;
-}
-
-.signup-link {
-  margin-top: 25px;
-  font-size: 0.9rem;
-  color: #0F4C75;
-  text-align: center;
-}
-
-.signup-link a {
-  text-decoration: none;
-  color: #0F4C75;
-  font-weight: bold;
-}
-
-.signup-link a:hover {
-  text-decoration: underline;
-  color: #1B262C;
-}
-
-.login-image-container {
-  flex: 1;
-  background-image: url('/images/LoginImage.png');
-  background-size: cover;
-  height: auto;
-}
-
-@media (max-width: 768px) {
-  .split-container {
-    flex-direction: column;
-    width: 90%;
-    height: auto;
-  }
-  .image-container {
-    height: 300px;
-  }
-  .login-container {
-    padding: 15px;
-  }
 }

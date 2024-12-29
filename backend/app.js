@@ -11,12 +11,12 @@ import transactionRoutes from './routes/transactionRoutes.js';
 const app = express();
 
 // Middleware
-app.use(cors(
-  { 
-    allowedHeaders: ['Content-Type', 'Authorization', 'withCredentials'], 
-    credentials: true,
-  }
-));
+app.use(cors({
+  origin: 'http://localhost:5173', // The origin of your frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ,'PATCH'], // Allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization', 'withCredentials'], // Explicitly allow withCredentials header
+  credentials: true, // Allow cookies and credentials
+}));
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));

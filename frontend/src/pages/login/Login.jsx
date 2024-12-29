@@ -13,12 +13,13 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axiosInstance.post('api/auth/login', { email, password });
+      const response = await axiosInstance.post('/api/auth/login', { email, password });
       if (response.data.success) {
         alert('Login successful');
         navigate('/home'); 
       }
     } catch (error) {
+      console.log(error);
       alert(error.response?.data?.message || 'An error occurred');
     } finally {
       setLoading(false); 
@@ -32,22 +33,29 @@ const Login = () => {
           <form onSubmit={handleSubmit}>
             <h1>Login</h1>
             <input
+              id="login-email" // Add this line
+              name="email" // Add this line
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               aria-label="Email Address"
+              autoComplete="email"
             />
             <input
+              id="login-password" // Add this line
+              name="password" // Add this line
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               aria-label="Password"
+              autoComplete="current-password"
             />
             <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>
+            <a href="/new-otp" className="forgot-password-link">Haven't verified email yet? New OTP</a>
             <button type="submit" disabled={loading}>
               {loading ? 'Logging in...' : 'Login'}
             </button>
@@ -56,8 +64,7 @@ const Login = () => {
             </p>
           </form>
         </div>
-
-        <div className="image-container"></div>
+        <div className="login-image-container"></div>
       </div>
     </div>
   );
