@@ -5,7 +5,7 @@ import Signup from './pages/signup/Signup.jsx';
 import EmailConfirmation from './pages/signup/EmailConfirmation.jsx'; 
 import ForgotPassword from './pages/login/ForgotPassword.jsx'; 
 import ResetPassword from './pages/login/ResetPassword.jsx';
-// import Home from './pages/Home/Home.jsx';
+import Home from './pages/home/Home.jsx';
 import './App.css';
 import NewOtp from './pages/signup/NewOtp.jsx';
 
@@ -20,7 +20,7 @@ const App = () => {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/signup" element={<Signup />} />
         
-        {/* <Route path="/home" element={<Home />} /> */}
+        <Route path="/" element={<Home />} />
       </Routes>
     </Router>
   );
