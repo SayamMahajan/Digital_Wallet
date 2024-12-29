@@ -8,6 +8,7 @@ import ResetPassword from './pages/login/ResetPassword.jsx';
 import Home from './pages/home/Home.jsx';
 import './App.css';
 import NewOtp from './pages/signup/NewOtp.jsx';
+import PrivateRoute from './components/PrivateRoute.jsx';  // Import the PrivateRoute component
 
 const App = () => {
   return (
@@ -20,7 +21,8 @@ const App = () => {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/signup" element={<Signup />} />
         
-        <Route path="/" element={<Home />} />
+        {/* Protected Route */}
+        <Route path="/" element={<PrivateRoute element={<Home />} />} />
       </Routes>
     </Router>
   );

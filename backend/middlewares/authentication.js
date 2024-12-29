@@ -4,7 +4,6 @@ export const verifyToken = (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
-    console.error("No token found");
     return res.status(401).json({ message: "Unauthorized" });
   }
 
@@ -13,7 +12,6 @@ export const verifyToken = (req, res, next) => {
     req.userId = decoded.userId;
     next();
   } catch (error) {
-    console.error("Token verification failed: ", error.message);
     return res.status(401).json({ success: false, message: "Unauthorized" });
   }
 };

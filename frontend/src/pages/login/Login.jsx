@@ -16,7 +16,7 @@ const Login = () => {
       const response = await axiosInstance.post('/api/auth/login', { email, password });
       if (response.data.success) {
         alert('Login successful');
-        navigate('/home'); 
+        navigate('/'); 
       }
     } catch (error) {
       console.log(error);
