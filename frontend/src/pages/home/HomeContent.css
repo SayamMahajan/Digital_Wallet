@@ -13,6 +13,22 @@
 
 .details-span {
   color: #3F72AF;
+  position: relative; 
+  cursor: pointer; 
+}
+.details-span::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px; 
+  background-color: #3F72AF;
+  transition: width 0.3s ease-in-out; 
+}
+
+.details-span:hover::after {
+  width: 100%; 
 }
 
 .user-balance {
@@ -42,11 +58,10 @@
 
 
 
-/* Responsiveness for smaller screens */
 @media (max-width: 768px) {
   .split-container-content {
     flex-direction: column;
-    gap: 2rem; /* Increase the gap for better separation on smaller screens */
+    gap: 2rem; 
   }
 
   .content-table {
@@ -55,6 +70,6 @@
 
   .side-image-container {
     width: 100%;
-    height: 200px; /* Set a fixed height for smaller screens */
+    height: 200px; 
   }
 }

@@ -1,4 +1,4 @@
-.header{
+.header {
   background-color: #DBE2EF;
   padding: 15px;
   border-radius: 5px;
@@ -8,10 +8,15 @@
   align-items: center;
 }
 
-.header h1{
+.header h1 {
   font-size: 3rem;
   color: #27374d;
-  padding: 0 !important;
-  margin: 0 !important;
+  margin: 0;
   font-weight: 800;
+  transition: transform 0.3s ease, color 0.3s ease; 
+}
+
+.header h1:hover {
+  transform: scale(1.1); 
+  color: #3F72AF; 
 }
