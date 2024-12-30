@@ -1,0 +1,17 @@
+.header{
+  background-color: #DBE2EF;
+  padding: 15px;
+  border-radius: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header h1{
+  font-size: 3rem;
+  color: #27374d;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-weight: 800;
+}

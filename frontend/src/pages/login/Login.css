@@ -36,8 +36,9 @@
   box-shadow: 0 8px 32px 0 rgba(32, 48, 58, 0.549);
   -webkit-backdrop-filter: blur(3.5px);
   backdrop-filter: blur(3.5px);
-  height: 400px;
+  min-height: 400px; /* Use min-height instead of fixed height */
 }
+
 
 .login-container h1 {
   font-size: 28px;
@@ -95,7 +96,7 @@
 }
 
 .signup-link {
-  margin-top: 25px;
+  margin-top: 20px;
   font-size: 0.9rem;
   color: #0F4C75;
   text-align: center;
@@ -124,9 +125,6 @@
     flex-direction: column;
     width: 90%;
     height: auto;
-  }
-  .image-container {
-    height: 300px;
   }
   .login-container {
     padding: 15px;

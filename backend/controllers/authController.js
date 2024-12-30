@@ -8,20 +8,21 @@ import { generateJWTToken } from "../utils/generateJWTToken.js";
 import { sendConfirmationEmail, sendResetPasswordEmail, sendResetPasswordSuccessEmail, sendVerificationEmail } from "../resend/email.js";
 
 export const signup = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
   try {
-    if (!name || !email || !password){
+    if (!firstName || !lastName || !email || !password){
       return res.status(400).json({ success: false,  message: "Enter all fields"});
     }
     const userAlreadyExists = await User.findOne({ email });
     if (userAlreadyExists) return res.status(400).json({ success: false, message: 'User already exists' });
 
-    const upi_id = generateUPI();
+    const upi_id = firstName+generateUPI();
     const hashedPassword = await bcrypt.hash(password, 10);
     const verificationToken = generateVerificationToken();
 
     const user = new User({ 
-      name, 
+      firstName,
+      lastName, 
       email, 
       password : hashedPassword, 
       upi_id,
@@ -60,7 +61,7 @@ export const login = async (req, res) => {
 
     generateJWTToken(res, user._id, user.email);
 
-    return res.status(200).json({ success: true, message: 'Login successful!', upi_id: user.upi_id, balance: user.balance });
+    return res.status(200).json({ success: true, message: 'Login successful!'});
 
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });

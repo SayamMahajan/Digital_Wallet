@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const PrivateRoute = ({ element }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true); // New loading state
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/auth/check-auth', {
@@ -13,18 +13,17 @@ const PrivateRoute = ({ element }) => {
       .then(response => {
         if (response.data.success) {
           setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
         }
-        console.log(response.data);
-        console.log(response.data.success);
       })
       .catch(error => console.error("Error fetching profile data:", error))
-      .finally(() => setLoading(false)); // Set loading to false after API call
+      .finally(() => setLoading(false)); 
   }, []);
 
-  // Show a loading indicator while checking authentication
-  if (loading) return <div>Loading...</div>; // You can replace this with a spinner or other UI
+  if (loading) return <div>Loading...</div>;
 
-  // Redirect to login page if not authenticated
+
   if (!isAuthenticated) return <Navigate to="/login" />;
 
   return element;  

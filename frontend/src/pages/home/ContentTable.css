@@ -1,0 +1,53 @@
+/* Main container layout */
+.table-layout {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+
+}
+
+/* Individual user card */
+.user-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 1.5rem;
+  border-radius: 0px;
+  background-color: #DBE2EF;
+  margin-bottom: 1rem;
+  border: 1px solid #dbe2ef;
+}
+
+/* Detail row styling */
+.content-user-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #dbe2ef;
+}
+
+/* Remove border for the last detail row */
+.content-user-detail:last-child {
+  border-bottom: none;
+}
+
+/* Label styling */
+.label {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #3f72af;
+}
+
+/* Value styling */
+.value {
+  font-weight:lighter;
+  color: #27374d;
+  font-size: 1.3rem;
+}
+
+/* Card hover effect */
+.user-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}

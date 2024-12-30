@@ -4,7 +4,8 @@ import { axiosInstance } from '../../utils/api.js';
 import './Signup.css';
 
 const Signup = () => {
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false); 
@@ -14,7 +15,7 @@ const Signup = () => {
     e.preventDefault();
     setLoading(true); 
     try {
-      const response = await axiosInstance.post('/api/auth/signup', { name, email, password });
+      const response = await axiosInstance.post('/api/auth/signup', {firstName, lastName, email, password });
       if (response.data.success) {
         alert('Signup successful. Please verify your email.');
         navigate('/verify-email'); 
@@ -36,14 +37,24 @@ const Signup = () => {
           <form onSubmit={handleSubmit}>
             <h1>Signup</h1>
             <input
-              id="signup-name" // Add this line
-              name="name" // Add this line
+              id="signup-firstname" // Add this line
+              name="firstName" // Add this line
               type="text"
-              placeholder="Enter your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your first name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
               required
-              autoComplete="name"
+              autoComplete="firstName"
+            />
+            <input
+              id="signup-lastname" // Add this line
+              name="lastName" // Add this line
+              type="text"
+              placeholder="Enter your last name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+              autoComplete="lastName"
             />
             <input
               id="signup-email" // Add this line
