@@ -18,13 +18,13 @@ export const sendVerificationEmail = async (email, verificationToken) => {
   }
 };
 
-export const sendConfirmationEmail = async (email, name) => {
+export const sendConfirmationEmail = async (email, firstName) => {
   try {
     const { data, error } = await resend.emails.send({
       from: "Acme <onboarding@resend.dev>",
       to: [email],
       subject: "OneClickAway - Account Verified",
-      html: confirmationTemplate.replace("{userName}", name),
+      html: confirmationTemplate.replace("{userName}", firstName),
     });
 
     if (error) {
