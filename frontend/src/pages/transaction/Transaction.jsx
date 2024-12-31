@@ -7,15 +7,19 @@ import TransactionContent from './TransactionContent.jsx';
 
 const Transaction = () => {
   const [transactionData, setTransactionData] = useState(null);
+  const [usersData, setUsersData] = useState(null);
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/transactions/', {
       withCredentials: true, 
     })
-      .then(response => setTransactionData(response.data.user))
+      .then(response => {
+        setTransactionData(response.data.transactions);
+        setUsersData(response.data.user); // Assuming this is the correct field
+      })
       .catch(error => console.error("Error fetching profile data:", error));
   }, []);
-
+  
   return (
     <div className="layout">
       <div className='sidebar'>
@@ -24,7 +28,7 @@ const Transaction = () => {
       <div className="body">
         <HeaderTitle />
         <div className="content">
-        <TransactionContent transactionData={transactionData}/>
+        <TransactionContent transactionData={transactionData} users= {usersData}/>
         </div>
       </div>
     </div>

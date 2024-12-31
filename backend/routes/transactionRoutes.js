@@ -7,4 +7,5 @@ const router = express.Router();
 router.post('/', verifyToken, createTransaction);
 router.get('/', verifyToken, getTransactions);
 
+
 export default router;

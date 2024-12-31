@@ -30,24 +30,14 @@ export const createTransaction = async (req, res) => {
     await sender.save();
     await receiver.save();
 
-    const senderTransaction = new Transaction({
+    const transaction = new Transaction({
       sender_upi_id,
       receiver_upi_id,
       amount,
-      type: 'debit',
       description,
     });
 
-    const receiverTransaction = new Transaction({
-      sender_upi_id,
-      receiver_upi_id,
-      amount,
-      type: 'credit',
-      description,
-    });
-
-    await senderTransaction.save();
-    await receiverTransaction.save();
+    await transaction.save();
 
     res.status(200).json({ success: true, message: 'Transaction successful!' });
   } catch (error) {
@@ -58,11 +48,12 @@ export const createTransaction = async (req, res) => {
 
 export const getTransactions = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const userId = req.userId;
 
     if (!userId) {
       return res.status(400).json({ success: false, message: 'User ID is required' });
     }
+
     const user = await User.findById(userId);
 
     if (!user) {
@@ -72,9 +63,18 @@ export const getTransactions = async (req, res) => {
     const upi_id = user.upi_id;
     const transactions = await Transaction.find({
       $or: [{ sender_upi_id: upi_id }, { receiver_upi_id: upi_id }],
-    }).sort({ timestamp: -1 }); 
+    }).sort({ timestamp: -1 });
 
-    res.status(200).json({ success: true, transactions });
+    const formattedTransactions = transactions.map((transaction) => {
+      const type = transaction.sender_upi_id === upi_id ? 'debit' : 'credit';
+      return { ...transaction._doc, type };
+    });
+
+    res.status(200).json({ 
+      success: true, 
+      transactions: formattedTransactions, 
+      user: { ...user._doc, password: undefined } 
+    });
   } catch (error) {
     console.error('Error fetching transactions:', error);
     res.status(500).json({ success: false, message: 'Server error' });

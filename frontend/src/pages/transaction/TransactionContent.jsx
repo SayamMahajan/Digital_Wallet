@@ -1,75 +1,138 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import './TransactionContent.css';
 
-const TransactionContent = () => {
-  const dummyTransactions = [
-    {
-      sender_upi_id: 'user1@upi',
-      receiver_upi_id: 'user2@upi',
-      amount: 500,
-      timestamp: '2024-12-01T10:00:00Z',
-      transaction_type: 'debit',
-      description: 'Payment for groceries',
-    },
-    {
-      sender_upi_id: 'sayamuser12345678889963@oneclickaway',
-      receiver_upi_id: 'sayamuser12345678889963@oneclickaway',
-      amount: 1500,
-      timestamp: '2024-12-05T15:30:00Z',
-      transaction_type: 'credit',
-      description: 'Refund for event booking',
-    },
-    {
-      sender_upi_id: 'user2@upi',
-      receiver_upi_id: 'user1@upi',
-      amount: 200,
-      timestamp: '2024-12-10T12:00:00Z',
-      transaction_type: 'debit',
-      description: 'Lunch payment',
-    },
-  ];
+const TransactionContent = ({ transactionData, users }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSendForm, setShowSendForm] = useState(false);
+  const [receiverUPI, setReceiverUPI] = useState("");
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
+  const [receiverName, setReceiverName] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSendClick = () => {
+    setShowSendForm(true);
+    setReceiverName(null); 
+    setErrorMessage(""); 
+  };
+
+  const handleVerifyReceiver = async () => {
+    try {
+      console.log(receiverUPI);
+      const response = await axios.get(`http://localhost:5000/api/users/upi/${receiverUPI}`, {
+        withCredentials: true,
+      });
+      setReceiverName(response.data.name);
+      setErrorMessage("");
+    } catch (error) {
+      setReceiverName(null);
+      setErrorMessage("Receiver not found. Please check the UPI ID.");
+    }
+  };
+
+  const handleSendTransaction = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/transactions",
+        {
+          sender_upi_id: users.upi_id,
+          receiver_upi_id: receiverUPI,
+          amount: parseFloat(amount),
+          description,
+        },
+        { withCredentials: true }
+      );
+      alert(response.data.message);
+      setReceiverUPI("");
+      setAmount("");
+      setDescription("");
+      setReceiverName(null);
+      setErrorMessage("");
+      setShowSendForm(false);
+    } catch (error) {
+      alert("Transaction failed. Please try again.");
+    }
+  };
+
+  const handleDescriptionChange = (e) => {
+    if (e.target.value.length <= 20) {
+      setDescription(e.target.value);
+    }
+  };
+
+  const filteredTransactions = transactionData && transactionData.length > 0
+    ? transactionData.filter(transaction =>
+        transaction.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        transaction.sender_upi_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        transaction.receiver_upi_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (transaction.timestamp &&
+         new Date(transaction.timestamp).toLocaleDateString().includes(searchQuery))
+      )
+    : [];
+
+  const sortedTransactions = filteredTransactions.sort(
+    (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+  );
 
   return (
     <div className="transaction-content-container">
       <div className="transaction-header">
         <h2 className="transaction-h2">Transactions</h2>
+        <div className="transaction-search">
+          <input
+            type="text"
+            placeholder="Search by description, UPI, or date"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="search-input"
+          />
+        </div>
         <div className="transaction-buttons">
           <button>Deposit</button>
-          <button>Send</button>
+          <button onClick={handleSendClick}>Send</button>
         </div>
       </div>
       <hr />
       <div className="transaction-list-container">
         <div className="transaction-list">
-          {dummyTransactions.length > 0 ? (
-            dummyTransactions.map((transaction, index) => (
-              <div key={index} className="transaction-item">
-                <div className="transaction-item-row">
-                  <span className="transaction-item-label">Sender:</span>
-                  <span>{transaction.sender_upi_id}</span>
+          {sortedTransactions.length > 0 ? (
+            sortedTransactions.map((transaction, index) => {
+              const transactionType =
+                transaction.sender_upi_id === users.upi_id ? "Debit" : "Credit";
+              return (
+                <div key={index} className="transaction-item">
+                  <div className="transaction-item-row">
+                    <span className="transaction-item-label">Sender:</span>
+                    <span>{transaction.sender_upi_id}</span>
+                  </div>
+                  <div className="transaction-item-row">
+                    <span className="transaction-item-label">Receiver:</span>
+                    <span>{transaction.receiver_upi_id}</span>
+                  </div>
+                  <div className="transaction-item-row">
+                    <span className="transaction-item-label">Amount:</span>
+                    <span>₹{transaction.amount}</span>
+                  </div>
+                  <div className="transaction-item-row">
+                    <span className="transaction-item-label">Type:</span>
+                    <span>{transactionType}</span> 
+                  </div>
+                  <div className="transaction-item-row">
+                    <span className="transaction-item-label">Description:</span>
+                    <span>{transaction.description}</span>
+                  </div>
+                  <div className="transaction-item-row">
+                    <span className="transaction-item-label">Date:</span>
+                    <span>{new Date(transaction.timestamp).toLocaleString()}</span>
+                  </div>
                 </div>
-                <div className="transaction-item-row">
-                  <span className="transaction-item-label">Receiver:</span>
-                  <span>{transaction.receiver_upi_id}</span>
-                </div>
-                <div className="transaction-item-row">
-                  <span className="transaction-item-label">Amount:</span>
-                  <span>₹{transaction.amount}</span>
-                </div>
-                <div className="transaction-item-row">
-                  <span className="transaction-item-label">Type:</span>
-                  <span>{transaction.transaction_type}</span>
-                </div>
-                <div className="transaction-item-row">
-                  <span className="transaction-item-label">Description:</span>
-                  <span>{transaction.description}</span>
-                </div>
-                <div className="transaction-item-row">
-                  <span className="transaction-item-label">Date:</span>
-                  <span>{new Date(transaction.timestamp).toLocaleString()}</span>
-                </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <div className="no-transaction">
               <img
@@ -82,6 +145,37 @@ const TransactionContent = () => {
           )}
         </div>
       </div>
+
+      {showSendForm && (
+        <div className="send-form-modal">
+          <div className="send-form">
+            <h3>Send Money</h3>
+            <span className="close-btn" onClick={() => setShowSendForm(false)}>&times;</span>
+            <input
+              type="text"
+              placeholder="Receiver's UPI ID"
+              value={receiverUPI}
+              onChange={(e) => setReceiverUPI(e.target.value)}
+              onBlur={handleVerifyReceiver}
+            />
+            {receiverName && <p>Receiver Name: {receiverName}</p>}
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+            <input
+              type="number"
+              placeholder="Amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Short description (20 letters max) (Optional)"
+              value={description}
+              onChange={handleDescriptionChange}
+            />
+            <button onClick={handleSendTransaction}>Send</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

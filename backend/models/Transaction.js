@@ -13,15 +13,11 @@ const transactionSchema = new mongoose.Schema({
     type: Number, 
     required: true 
   },
-  type: { 
-    type: String, 
-    required: true, 
-    enum: ['credit', 'debit'] 
-  },
   description: { 
     type: String, 
     required: false, 
     maxlength: 20, 
+    default: "No description provided", 
     validate: {
       validator: function (value) {
         return value.length <= 20;
