@@ -69,6 +69,79 @@
   transform: scale(1);
 }
 
+/* Deposit Form Modal Styling */
+.deposit-form-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.deposit-form {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.deposit-form h3 {
+  margin-bottom: 20px;
+  color: #112d4e;
+}
+
+/* Cross button styling for Deposit Form */
+.deposit-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #3f72af;
+  transition: color 0.3s ease;
+}
+
+.deposit-close-btn:hover {
+  color: #112d4e;
+}
+
+.deposit-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #dbe2ef;
+  border-radius: 5px;
+}
+
+.deposit-form button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #3f72af;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.deposit-form button:hover {
+  background-color: #112d4e;
+}
+
+/* Button animation for smooth interaction */
+.deposit-form button:active {
+  transform: scale(0.98);
+}
+
 .send-form-modal {
   position: fixed;
   top: 0;
@@ -253,4 +326,8 @@
     width: 100%;
     margin-bottom: 1rem;
   }
+  .deposit-form {
+    width: 90%;
+  }
+
 }

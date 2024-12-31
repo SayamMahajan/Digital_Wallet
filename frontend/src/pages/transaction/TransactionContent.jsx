@@ -5,11 +5,14 @@ import './TransactionContent.css';
 const TransactionContent = ({ transactionData, users }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSendForm, setShowSendForm] = useState(false);
+  const [showDepositForm, setShowDepositForm] = useState(false);
   const [receiverUPI, setReceiverUPI] = useState('');
-  const [amount, setAmount] = useState('');
+  const [sendAmount, setSendAmount] = useState('');
+  const [depositAmount, setDepositAmount] = useState('');
   const [description, setDescription] = useState('');
   const [receiverName, setReceiverName] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [paypalApprovalUrl, setPaypalApprovalUrl] = useState('');
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -21,9 +24,14 @@ const TransactionContent = ({ transactionData, users }) => {
     setErrorMessage('');
   };
 
+  const handleDepositClick = () => {
+    setShowDepositForm(true);
+    setErrorMessage('');
+  };
+
   const handleVerifyReceiver = async () => {
     const cleanedUPI = receiverUPI.trim();
-  
+
     try {
       const response = await axiosInstance.get(`/api/users/upi/${cleanedUPI}`, { withCredentials: true });
       setReceiverName(response.data.name);
@@ -33,11 +41,11 @@ const TransactionContent = ({ transactionData, users }) => {
       setErrorMessage('Receiver not found. Please check the UPI ID.');
     }
   };
-  
+
   const handleSendTransaction = async () => {
     const cleanedReceiverUPI = receiverUPI.trim();
-    const cleanedAmount = parseFloat(amount);
-  
+    const cleanedAmount = parseFloat(sendAmount);
+
     try {
       const response = await axiosInstance.post(
         '/api/transactions',
@@ -51,7 +59,7 @@ const TransactionContent = ({ transactionData, users }) => {
       );
       alert(response.data.message);
       setReceiverUPI('');
-      setAmount('');
+      setSendAmount('');
       setDescription('');
       setReceiverName(null);
       setErrorMessage('');
@@ -60,7 +68,6 @@ const TransactionContent = ({ transactionData, users }) => {
       alert('Transaction failed. Please try again.');
     }
   };
-  
 
   const handleDescriptionChange = (e) => {
     if (e.target.value.length <= 20) {
@@ -68,17 +75,35 @@ const TransactionContent = ({ transactionData, users }) => {
     }
   };
 
-  const filteredTransactions = transactionData && transactionData.length > 0
-  ? transactionData.filter((transaction) =>
-      transaction.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      transaction.sender_upi_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      transaction.receiver_upi_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (transaction.timestamp &&
-        new Date(transaction.timestamp).toLocaleDateString().includes(searchQuery)) ||
-      (transaction._id && transaction._id.toLowerCase().includes(searchQuery.toLowerCase()))
-    )
-  : [];
+  const handlePaypalDeposit = async () => {
+    try {
+      const response = await axiosInstance.post(
+        '/api/transactions/deposit',
+        { amount: depositAmount },
+        { withCredentials: true }
+      );
 
+      const { approvalUrl } = response.data;
+
+      setPaypalApprovalUrl(approvalUrl); // Save the approval URL for PayPal redirect
+
+      // Redirect to PayPal approval page
+      window.location.href = approvalUrl;
+    } catch (error) {
+      alert('Error during payment processing. Please try again.');
+    }
+  };
+
+  const filteredTransactions = transactionData && transactionData.length > 0
+    ? transactionData.filter((transaction) =>
+        transaction.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        transaction.sender_upi_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        transaction.receiver_upi_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (transaction.timestamp &&
+          new Date(transaction.timestamp).toLocaleDateString().includes(searchQuery)) ||
+        (transaction._id && transaction._id.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+    : [];
 
   const sortedTransactions = filteredTransactions.sort(
     (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
@@ -91,7 +116,7 @@ const TransactionContent = ({ transactionData, users }) => {
         <div className="transaction-search">
           <input
             id="transaction-search-input"
-            name='searchBar'
+            name="searchBar"
             type="text"
             placeholder="Search by transaction id, UPI, date, or description"
             value={searchQuery}
@@ -100,7 +125,7 @@ const TransactionContent = ({ transactionData, users }) => {
           />
         </div>
         <div className="transaction-buttons">
-          <button>Deposit</button>
+          <button onClick={handleDepositClick}>Deposit</button>
           <button onClick={handleSendClick}>Send</button>
         </div>
       </div>
@@ -110,7 +135,7 @@ const TransactionContent = ({ transactionData, users }) => {
           {sortedTransactions.length > 0 ? (
             sortedTransactions.map((transaction, index) => {
               const transactionType =
-                transaction.sender_upi_id === users.upi_id ? "Debit" : "Credit";
+                transaction.sender_upi_id === users.upi_id ? 'Debit' : 'Credit';
               return (
                 <div key={index} className="transaction-item">
                   <div className="transaction-item-row">
@@ -131,7 +156,7 @@ const TransactionContent = ({ transactionData, users }) => {
                   </div>
                   <div className="transaction-item-row">
                     <span className="transaction-item-label">Type:</span>
-                    <span>{transactionType}</span> 
+                    <span>{transactionType}</span>
                   </div>
                   <div className="transaction-item-row">
                     <span className="transaction-item-label">Description:</span>
@@ -175,12 +200,12 @@ const TransactionContent = ({ transactionData, users }) => {
             {receiverName && <p>Receiver Name: {receiverName}</p>}
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <input
-              id="amount"
-              name="amount"
+              id="send-amount"
+              name="sendAmount"
               type="number"
               placeholder="Amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              value={sendAmount}
+              onChange={(e) => setSendAmount(e.target.value)}
               autoComplete="off"
             />
             <input
@@ -193,6 +218,27 @@ const TransactionContent = ({ transactionData, users }) => {
               autoComplete="off"
             />
             <button onClick={handleSendTransaction}>Send</button>
+          </div>
+        </div>
+      )}
+
+      {showDepositForm && (
+        <div className="deposit-form-modal">
+          <div className="deposit-form">
+            <h3>Deposit Money</h3>
+            <span className="close-btn" onClick={() => setShowDepositForm(false)}>&times;</span>
+            <input
+              id="deposit-amount"
+              name="depositAmount"
+              type="number"
+              placeholder="Amount"
+              value={depositAmount}
+              onChange={(e) => setDepositAmount(e.target.value)}
+              autoComplete="off"
+            />
+            {depositAmount > 0 && (
+              <button onClick={handlePaypalDeposit}>Proceed with PayPal</button>
+            )}
           </div>
         </div>
       )}
