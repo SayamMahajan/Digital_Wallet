@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { axiosInstance } from '../../utils/api.js';
 import Sidebar from '../../components/Sidebar';
 import './Transaction.css';
 import HeaderTitle from '../../components/HeaderTitle.jsx';
@@ -10,14 +10,17 @@ const Transaction = () => {
   const [usersData, setUsersData] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/transactions/', {
-      withCredentials: true, 
-    })
-      .then(response => {
+    const fetchTransactionData = async () => {
+      try {
+        const response = await axiosInstance.get('/api/transactions/', { withCredentials: true });
         setTransactionData(response.data.transactions);
-        setUsersData(response.data.user); // Assuming this is the correct field
-      })
-      .catch(error => console.error("Error fetching profile data:", error));
+        setUsersData(response.data.user);
+      } catch (error) {
+        console.error('Error fetching transaction data:', error);
+      }
+    };
+
+    fetchTransactionData();
   }, []);
   
   return (
