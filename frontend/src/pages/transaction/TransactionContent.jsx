@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { axiosInstance } from '../../utils/api.js';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './TransactionContent.css';
 
 const TransactionContent = ({ transactionData, users }) => {
@@ -13,6 +14,35 @@ const TransactionContent = ({ transactionData, users }) => {
   const [receiverName, setReceiverName] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [paypalApprovalUrl, setPaypalApprovalUrl] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Handle PayPal success
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const paymentId = queryParams.get('paymentId');
+    const payerId = queryParams.get('PayerID');
+
+    if (paymentId && payerId) {
+      handlePaymentSuccess(paymentId, payerId);
+    }
+  }, [location]);
+
+  const handlePaymentSuccess = async (paymentId, payerId) => {
+    try {
+      const response = await axiosInstance.post(
+        '/api/transactions/handlePaymentSuccess',
+        { paymentId, payerId },
+        { withCredentials: true }
+      );
+      alert(response.data.message);
+      // Redirect to transactions page after successful deposit
+      navigate('/transactions');
+    } catch (error) {
+      alert('Error verifying payment. Please try again.');
+    }
+  };
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -76,23 +106,25 @@ const TransactionContent = ({ transactionData, users }) => {
   };
 
   const handlePaypalDeposit = async () => {
+    if (isProcessing) return; // Prevent multiple submissions
+    setIsProcessing(true); // Mark as processing
+  
     try {
       const response = await axiosInstance.post(
         '/api/transactions/deposit',
         { amount: depositAmount },
         { withCredentials: true }
       );
-
+  
       const { approvalUrl } = response.data;
-
-      setPaypalApprovalUrl(approvalUrl); // Save the approval URL for PayPal redirect
-
-      // Redirect to PayPal approval page
-      window.location.href = approvalUrl;
+      setPaypalApprovalUrl(approvalUrl);
+  
+      window.location.href = approvalUrl; // Redirect to PayPal for approval
     } catch (error) {
       alert('Error during payment processing. Please try again.');
+      setIsProcessing(false); // Reset processing flag on error
     }
-  };
+  };  
 
   const filteredTransactions = transactionData && transactionData.length > 0
     ? transactionData.filter((transaction) =>
@@ -134,8 +166,15 @@ const TransactionContent = ({ transactionData, users }) => {
         <div className="transaction-list">
           {sortedTransactions.length > 0 ? (
             sortedTransactions.map((transaction, index) => {
-              const transactionType =
-                transaction.sender_upi_id === users.upi_id ? 'Debit' : 'Credit';
+              let transactionType = '';
+              if (transaction.sender_upi_id === users.upi_id && transaction.receiver_upi_id === users.upi_id) {
+                transactionType = 'Deposit'; 
+              } else if (transaction.sender_upi_id === users.upi_id) {
+                transactionType = 'Debit'; 
+              } else {
+                transactionType = 'Credit';
+              }
+
               return (
                 <div key={index} className="transaction-item">
                   <div className="transaction-item-row">

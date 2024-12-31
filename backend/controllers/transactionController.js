@@ -136,7 +136,7 @@ export const addDeposit = async (req, res) => {
         sender_upi_id: user.upi_id,
         receiver_upi_id: user.upi_id,
         amount: numericAmount, // Use the numeric value here
-        description: 'Deposit',
+        description: 'Deposit via PayPal',
       });
       await newTransaction.save();
 
@@ -151,12 +151,16 @@ export const addDeposit = async (req, res) => {
     return res.status(500).json({ success: false, message: 'Server error' });
   }
 };
-
-
 export const handlePaymentSuccess = async (req, res) => {
   const { paymentId, payerId } = req.body;
 
   try {
+    // Prevent processing multiple times by checking if the payment has been processed before
+    const existingTransaction = await Transaction.findOne({ paymentId });
+    if (existingTransaction) {
+      return res.status(200).json({ success: true, message: 'Payment already processed' });
+    }
+
     // Execute PayPal payment
     paypal.payment.execute(paymentId, { payer_id: payerId }, async function (error, payment) {
       if (error) {
@@ -171,14 +175,14 @@ export const handlePaymentSuccess = async (req, res) => {
         }
 
         // Add deposit amount to user balance
-        user.balance += payment.transactions[0].amount.total;
+        user.balance += parseFloat(payment.transactions[0].amount.total); // Ensure it's a number
         await user.save();
 
         // Optionally, create a transaction entry
         const newTransaction = new Transaction({
           sender_upi_id: req.userId,
           receiver_upi_id: req.userId,
-          amount: payment.transactions[0].amount.total,
+          amount: parseFloat(payment.transactions[0].amount.total), // Ensure it's a number
           description: 'Deposit',
         });
         await newTransaction.save();
