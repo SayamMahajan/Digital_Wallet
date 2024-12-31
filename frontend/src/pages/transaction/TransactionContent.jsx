@@ -69,14 +69,16 @@ const TransactionContent = ({ transactionData, users }) => {
   };
 
   const filteredTransactions = transactionData && transactionData.length > 0
-    ? transactionData.filter((transaction) =>
-        transaction.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        transaction.sender_upi_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        transaction.receiver_upi_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (transaction.timestamp &&
-          new Date(transaction.timestamp).toLocaleDateString().includes(searchQuery))
-      )
-    : [];
+  ? transactionData.filter((transaction) =>
+      transaction.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      transaction.sender_upi_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      transaction.receiver_upi_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (transaction.timestamp &&
+        new Date(transaction.timestamp).toLocaleDateString().includes(searchQuery)) ||
+      (transaction._id && transaction._id.toLowerCase().includes(searchQuery.toLowerCase()))
+    )
+  : [];
+
 
   const sortedTransactions = filteredTransactions.sort(
     (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
@@ -91,7 +93,7 @@ const TransactionContent = ({ transactionData, users }) => {
             id="transaction-search-input"
             name='searchBar'
             type="text"
-            placeholder="Search by description, UPI, or date"
+            placeholder="Search by transaction id, UPI, date, or description"
             value={searchQuery}
             onChange={handleSearchChange}
             className="search-input"
@@ -111,6 +113,10 @@ const TransactionContent = ({ transactionData, users }) => {
                 transaction.sender_upi_id === users.upi_id ? "Debit" : "Credit";
               return (
                 <div key={index} className="transaction-item">
+                  <div className="transaction-item-row">
+                    <span className="transaction-item-label">Transaction Id:</span>
+                    <span>{transaction._id}</span>
+                  </div>
                   <div className="transaction-item-row">
                     <span className="transaction-item-label">Sender:</span>
                     <span>{transaction.sender_upi_id}</span>
