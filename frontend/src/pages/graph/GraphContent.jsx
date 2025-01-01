@@ -33,7 +33,7 @@ const GraphContent = ({ transactionData, users }) => {
       <div className="graph-container">
         {chartData.length === 0 ? (
           <div className="no-history">
-            <img src="path/to/empty-history-image.png" alt="No transaction history" />
+            <img src="/images/NoTransactionImage.jpg" alt="No transaction history" />
             <p>No transaction history available</p>
           </div>
         ) : (
