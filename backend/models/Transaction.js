@@ -9,6 +9,10 @@ const transactionSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
+  paymentId: { 
+    type: String, 
+    unique: true, 
+  },
   amount: { 
     type: Number, 
     required: true 
@@ -16,13 +20,13 @@ const transactionSchema = new mongoose.Schema({
   description: { 
     type: String, 
     required: false, 
-    maxlength: 20, 
+    maxlength: 40, 
     default: "No description provided", 
     validate: {
       validator: function (value) {
-        return value.length <= 20;
+        return value.length <= 40;
       },
-      message: 'Description cannot exceed 20 characters including spaces.',
+      message: 'Description cannot exceed 40 characters including spaces.',
     },
   },
   timestamp: { 

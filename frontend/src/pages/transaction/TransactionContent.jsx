@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { axiosInstance } from '../../utils/api.js';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './TransactionContent.css';
@@ -13,10 +13,10 @@ const TransactionContent = ({ transactionData, users }) => {
   const [description, setDescription] = useState('');
   const [receiverName, setReceiverName] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-  const [paypalApprovalUrl, setPaypalApprovalUrl] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const handledPaymentRef = useRef(new Set()); // Track processed payments
 
   // Handle PayPal success
   useEffect(() => {
@@ -25,9 +25,13 @@ const TransactionContent = ({ transactionData, users }) => {
     const payerId = queryParams.get('PayerID');
 
     if (paymentId && payerId) {
-      handlePaymentSuccess(paymentId, payerId);
+      const uniqueKey = `${paymentId}-${payerId}`;
+      if (!handledPaymentRef.current.has(uniqueKey)) {
+        handledPaymentRef.current.add(uniqueKey); // Mark as processed
+        handlePaymentSuccess(paymentId, payerId);
+      }
     }
-  }, [location]);
+  }, [location.search]);
 
   const handlePaymentSuccess = async (paymentId, payerId) => {
     try {
@@ -37,12 +41,12 @@ const TransactionContent = ({ transactionData, users }) => {
         { withCredentials: true }
       );
       alert(response.data.message);
-      // Redirect to transactions page after successful deposit
       navigate('/transactions');
     } catch (error) {
       alert('Error verifying payment. Please try again.');
     }
   };
+
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -100,14 +104,14 @@ const TransactionContent = ({ transactionData, users }) => {
   };
 
   const handleDescriptionChange = (e) => {
-    if (e.target.value.length <= 20) {
+    if (e.target.value.length <= 40) {
       setDescription(e.target.value);
     }
   };
 
   const handlePaypalDeposit = async () => {
-    if (isProcessing) return; // Prevent multiple submissions
-    setIsProcessing(true); // Mark as processing
+    if (isProcessing) return; // Prevent double clicks
+    setIsProcessing(true); // Set a flag to prevent re-entry
   
     try {
       const response = await axiosInstance.post(
@@ -117,12 +121,16 @@ const TransactionContent = ({ transactionData, users }) => {
       );
   
       const { approvalUrl } = response.data;
-      setPaypalApprovalUrl(approvalUrl);
   
-      window.location.href = approvalUrl; // Redirect to PayPal for approval
+      if (approvalUrl) {
+        window.location.href = approvalUrl; // Redirect to PayPal
+      } else {
+        alert('Failed to fetch PayPal approval URL.');
+      }
     } catch (error) {
       alert('Error during payment processing. Please try again.');
-      setIsProcessing(false); // Reset processing flag on error
+    } finally {
+      setIsProcessing(false); // Reset flag
     }
   };  
 
@@ -251,7 +259,7 @@ const TransactionContent = ({ transactionData, users }) => {
               id="description"
               name="description"
               type="text"
-              placeholder="Short description (20 letters max) (Optional)"
+              placeholder="Short description (40 letters max) (Optional)"
               value={description}
               onChange={handleDescriptionChange}
               autoComplete="off"

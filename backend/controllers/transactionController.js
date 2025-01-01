@@ -50,7 +50,6 @@ export const createTransaction = async (req, res) => {
 
     res.status(200).json({ success: true, message: 'Transaction successful!' });
   } catch (error) {
-    console.error('Transaction error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
@@ -69,42 +68,41 @@ export const getTransactions = async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
-
     const upi_id = user.upi_id;
     const transactions = await Transaction.find({
       $or: [{ sender_upi_id: upi_id }, { receiver_upi_id: upi_id }],
     }).sort({ timestamp: -1 });
 
-    const formattedTransactions = transactions.map((transaction) => {
-      const type = transaction.sender_upi_id === upi_id ? 'debit' : 'credit';
-      return { ...transaction._doc, type };
-    });
-
     res.status(200).json({ 
       success: true, 
-      transactions: formattedTransactions, 
+      transactions, 
       user: { ...user._doc, password: undefined } 
     });
   } catch (error) {
-    console.error('Error fetching transactions:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+
+const INR_TO_USD_CONVERSION_RATE = 0.012; // Example: 1 INR = 0.012 USD
+
 export const addDeposit = async (req, res) => {
   try {
     const userId = req.userId;
     const { amount } = req.body;
 
-    // Ensure amount is a valid number and greater than 0
     const numericAmount = parseFloat(amount);
     if (isNaN(numericAmount) || numericAmount <= 0) {
       return res.status(400).json({ success: false, message: 'Invalid amount' });
     }
 
-    // Find the user
     const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
 
-    // Prepare PayPal payment request
+    // Convert INR to USD
+    const amountInUSD = (numericAmount * INR_TO_USD_CONVERSION_RATE).toFixed(2);
+
     const paymentJson = {
       intent: 'sale',
       payer: { payment_method: 'paypal' },
@@ -114,57 +112,42 @@ export const addDeposit = async (req, res) => {
       },
       transactions: [{
         amount: {
-          total: numericAmount.toFixed(2), // Ensure it's a number and format it to 2 decimal places
-          currency: 'USD',
+          total: amountInUSD,
+          currency: 'USD', // Use supported currency
         },
-        description: 'Deposit to your wallet',
+        description: `Deposit of ₹${numericAmount.toFixed(2)} converted to USD`,
       }],
     };
 
-    // Create PayPal payment
-    paypal.payment.create(paymentJson, async function (error, payment) {
+    paypal.payment.create(paymentJson, (error, payment) => {
       if (error) {
-        console.error(error);
         return res.status(500).json({ success: false, message: 'Error creating PayPal payment' });
       }
 
-      // Get the approval_url for the payment
-      const approvalUrl = payment.links.find(link => link.rel === 'approval_url').href;
+      const approvalUrl = payment.links.find(link => link.rel === 'approval_url')?.href;
 
-      // Optionally save transaction info in the database
-      const newTransaction = new Transaction({
-        sender_upi_id: user.upi_id,
-        receiver_upi_id: user.upi_id,
-        amount: numericAmount, // Use the numeric value here
-        description: 'Deposit via PayPal',
-      });
-      await newTransaction.save();
+      if (!approvalUrl) {
+        return res.status(500).json({ success: false, message: 'Approval URL not found' });
+      }
 
-      // Return the approval URL to the client
-      res.status(200).json({
-        success: true,
-        approvalUrl,
-      });
+      res.status(200).json({ success: true, approvalUrl });
     });
   } catch (error) {
-    console.error('Error during deposit:', error);
     return res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+
 export const handlePaymentSuccess = async (req, res) => {
   const { paymentId, payerId } = req.body;
 
   try {
-    // Prevent processing multiple times by checking if the payment has been processed before
     const existingTransaction = await Transaction.findOne({ paymentId });
     if (existingTransaction) {
       return res.status(200).json({ success: true, message: 'Payment already processed' });
     }
 
-    // Execute PayPal payment
-    paypal.payment.execute(paymentId, { payer_id: payerId }, async function (error, payment) {
+    paypal.payment.execute(paymentId, { payer_id: payerId }, async (error, payment) => {
       if (error) {
-        console.error(error);
         return res.status(400).json({ success: false, message: 'Payment verification failed' });
       }
 
@@ -174,16 +157,19 @@ export const handlePaymentSuccess = async (req, res) => {
           return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        // Add deposit amount to user balance
-        user.balance += parseFloat(payment.transactions[0].amount.total); // Ensure it's a number
+        // Convert USD back to INR for user's wallet balance
+        const amountInUSD = parseFloat(payment.transactions[0].amount.total);
+        const amountInINR = (amountInUSD / INR_TO_USD_CONVERSION_RATE).toFixed(2);
+
+        user.balance += parseFloat(amountInINR);
         await user.save();
 
-        // Optionally, create a transaction entry
         const newTransaction = new Transaction({
-          sender_upi_id: req.userId,
-          receiver_upi_id: req.userId,
-          amount: parseFloat(payment.transactions[0].amount.total), // Ensure it's a number
-          description: 'Deposit',
+          sender_upi_id: user.upi_id,
+          receiver_upi_id: user.upi_id,
+          amount: parseFloat(amountInINR),
+          description: `Deposit of ₹${amountInINR} (= $${amountInUSD})`,
+          paymentId,
         });
         await newTransaction.save();
 
@@ -193,7 +179,6 @@ export const handlePaymentSuccess = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error during payment success handling:', error);
     return res.status(500).json({ success: false, message: 'Server error' });
   }
 };
