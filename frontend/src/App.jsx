@@ -8,9 +8,10 @@ import ResetPassword from './pages/login/ResetPassword.jsx';
 import Home from './pages/home/Home.jsx';
 import Transaction from './pages/transaction/Transaction.jsx';
 import Request from './pages/request/Request.jsx';
+import Graph from './pages/graph/Graph.jsx';
 import './App.css';
 import NewOtp from './pages/signup/NewOtp.jsx';
-import PrivateRoute from './components/PrivateRoute.jsx';  // Import the PrivateRoute component
+import PrivateRoute from './components/PrivateRoute.jsx'; 
 
 const App = () => {
   return (
@@ -23,10 +24,11 @@ const App = () => {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/signup" element={<Signup />} />
         
-        {/* Protected Route */}
+
         <Route path="/" element={<PrivateRoute element={<Home />} />} />
         <Route path="/transactions" element={<PrivateRoute element={<Transaction />} />} />
-        <Route path="/request" element={<PrivateRoute element={<Request />} />} />
+        <Route path="/requests" element={<PrivateRoute element={<Request />} />} />
+        <Route path="/graphs" element={<PrivateRoute element={<Graph />} />} />
       </Routes>
     </Router>
   );

@@ -26,8 +26,6 @@ const Home = () => {
   }
 
   return (
-    //   <button onClick={() => window.location.href = '/user-update-profile'}>Update Profile</button>
-
     <div className="layout">
       <div className='sidebar'>
         <Sidebar />

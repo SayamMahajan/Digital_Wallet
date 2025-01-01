@@ -1,0 +1,56 @@
+.graph-container {
+  padding: 30px;
+  background-color: #F2F4F9;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.no-history {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: #DBE2EF;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.no-history img {
+  width: 250px;
+  height: 250px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.no-history p {
+  font-size: 18px;
+  font-weight: bold;
+  color: #3F72AF;
+}
+
+.user-welcome {
+  font-size: 24px;
+  font-weight: 600;
+  color: #112D4E;
+  margin-bottom: 10px;
+}
+
+.details-span {
+  color: #3F72AF;
+  font-weight: 500;
+}
+
+.user-balance {
+  font-size: 18px;
+  font-weight: 500;
+  color: #112D4E;
+  margin-bottom: 20px;
+}
+
+.graph-container .recharts-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}

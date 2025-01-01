@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { BiHome, BiTransfer, BiArrowToBottom, BiUser, BiExit } from 'react-icons/bi';
+import { BiHome, BiTransfer, BiArrowToBottom, BiBarChart , BiExit } from 'react-icons/bi';
 import { axiosInstance } from '../utils/api';
 import './Sidebar.css';
 
@@ -40,18 +40,18 @@ function Sidebar() {
                     Transactions
                 </Link>
                 <Link
-                    to="/request"
-                    className={`item ${isActive('/request') ? 'active' : ''}`}
+                    to="/requests"
+                    className={`item ${isActive('/requests') ? 'active' : ''}`}
                 >
                     <BiArrowToBottom className="icon" />
                     Request
                 </Link>
                 <Link
-                    to="/profile"
-                    className={`item ${isActive('/profile') ? 'active' : ''}`}
+                    to="/graphs"
+                    className={`item ${isActive('/graphs') ? 'active' : ''}`}
                 >
-                    <BiUser className="icon" />
-                    Profile
+                    <BiBarChart  className="icon" />
+                    Graphs
                 </Link>
                 <button
                     className="item"
