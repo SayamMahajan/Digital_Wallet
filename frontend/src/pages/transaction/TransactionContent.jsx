@@ -42,6 +42,10 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
     }
   }, [location.search]);
 
+  const roundToFiveDecimalPlaces = (value) => {
+    return Math.round(value * 100000) / 100000;
+  };
+
   const handlePaymentSuccess = async (paymentId, payerId) => {
     try {
       const response = await axiosInstance.post(
@@ -56,7 +60,6 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
       alert('Error verifying payment. Please try again.');
     }
   };
-
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -75,6 +78,11 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
 
   const handleVerifyReceiver = async () => {
     const cleanedUPI = receiverUPI.trim();
+    if (users.upi_id === cleanedUPI) {
+      setReceiverName(users.firstName + ' ' + users.lastName);
+      setErrorMessage('Cannot send money to yourself.');
+      return; 
+    }
 
     try {
       const response = await axiosInstance.get(`/api/users/upi/${cleanedUPI}`, { withCredentials: true });
@@ -88,11 +96,11 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
 
   const handleSendTransaction = async () => {
     const cleanedReceiverUPI = receiverUPI.trim();
-    const cleanedAmount = parseFloat(sendAmount);
+    const cleanedAmount = roundToFiveDecimalPlaces(parseFloat(sendAmount));
 
     try {
       const response = await axiosInstance.post(
-        '/api/transactions',
+        '/api/transactions/',
         {
           sender_upi_id: users.upi_id,
           receiver_upi_id: cleanedReceiverUPI,
@@ -110,6 +118,7 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
       setShowSendForm(false);
       await fetchTransactions();
     } catch (error) {
+      console.error('Error sending transaction:', error);
       alert('Transaction failed. Please try again.');
     }
   };
@@ -123,16 +132,18 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
   const handlePaypalDeposit = async () => {
     if (isProcessing) return; // Prevent double clicks
     setIsProcessing(true); // Set a flag to prevent re-entry
-  
+
+    const cleanedDepositAmount = roundToFiveDecimalPlaces(parseFloat(depositAmount));
+
     try {
       const response = await axiosInstance.post(
         '/api/transactions/deposit',
-        { amount: depositAmount },
+        { amount: cleanedDepositAmount  },
         { withCredentials: true }
       );
-  
+
       const { approvalUrl } = response.data;
-  
+
       if (approvalUrl) {
         window.location.href = approvalUrl; // Redirect to PayPal
       } else {
@@ -143,7 +154,7 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
     } finally {
       setIsProcessing(false); // Reset flag
     }
-  };  
+  };
 
   const filteredTransactions = transactionData && transactionData.length > 0
     ? transactionData.filter((transaction) =>
@@ -265,6 +276,7 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
               value={sendAmount}
               onChange={(e) => setSendAmount(e.target.value)}
               autoComplete="off"
+              maxLength={10} // Max digits allowed
             />
             <input
               id="description"
@@ -274,6 +286,7 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
               value={description}
               onChange={handleDescriptionChange}
               autoComplete="off"
+              maxLength={40} // Limit description to 40 characters
             />
             <button onClick={handleSendTransaction}>Send</button>
           </div>
@@ -293,6 +306,7 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
               value={depositAmount}
               onChange={(e) => setDepositAmount(e.target.value)}
               autoComplete="off"
+              maxLength={10} // Max digits allowed
             />
             {depositAmount > 0 && (
               <button onClick={handlePaypalDeposit}>Proceed with PayPal</button>

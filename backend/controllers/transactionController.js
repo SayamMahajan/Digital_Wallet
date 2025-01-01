@@ -1,6 +1,5 @@
 import User from '../models/User.js';
 import Transaction from '../models/Transaction.js';
-import { v4 as uuidv4 } from 'uuid';
 import paypal from 'paypal-rest-sdk';
 
 paypal.configure({
@@ -48,9 +47,9 @@ export const createTransaction = async (req, res) => {
 
     await transaction.save();
 
-    res.status(200).json({ success: true, message: 'Transaction successful!' });
+    return res.status(200).json({ success: true, message: 'Transaction successful!' });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error' });
+    return res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
