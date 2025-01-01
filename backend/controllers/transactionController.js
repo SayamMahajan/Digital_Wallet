@@ -71,13 +71,13 @@ export const getTransactions = async (req, res) => {
       $or: [{ sender_upi_id: upi_id }, { receiver_upi_id: upi_id }],
     }).sort({ timestamp: -1 });
 
-    res.status(200).json({ 
+    return res.status(200).json({ 
       success: true, 
       transactions, 
       user: { ...user._doc, password: undefined } 
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error' });
+    return res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 

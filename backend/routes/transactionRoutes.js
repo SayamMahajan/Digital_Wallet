@@ -5,8 +5,11 @@ import { verifyToken } from "../middlewares/authentication.js";
 const router = express.Router();
 
 router.post('/', verifyToken, createTransaction);
+
 router.get('/', verifyToken, getTransactions);
+
 router.post('/deposit', verifyToken, addDeposit);
+
 router.post('/handlePaymentSuccess', verifyToken, handlePaymentSuccess);
 
 

@@ -7,6 +7,7 @@ import ForgotPassword from './pages/login/ForgotPassword.jsx';
 import ResetPassword from './pages/login/ResetPassword.jsx';
 import Home from './pages/home/Home.jsx';
 import Transaction from './pages/transaction/Transaction.jsx';
+import Request from './pages/request/Request.jsx';
 import './App.css';
 import NewOtp from './pages/signup/NewOtp.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';  // Import the PrivateRoute component
@@ -25,6 +26,7 @@ const App = () => {
         {/* Protected Route */}
         <Route path="/" element={<PrivateRoute element={<Home />} />} />
         <Route path="/transactions" element={<PrivateRoute element={<Transaction />} />} />
+        <Route path="/request" element={<PrivateRoute element={<Request />} />} />
       </Routes>
     </Router>
   );

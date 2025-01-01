@@ -1,0 +1,23 @@
+.layout{
+  display: flex;
+  padding: 15px;
+  height: 100vh;
+  gap: 15px;
+  width: 100%;
+}
+
+.sidebar{
+  background-color: #DBE2EF;
+  padding: 15px;
+  border-radius: 5px;
+  height: 100%;
+}
+
+.body{
+  width: 100%;
+}
+
+.content{
+  padding: 15px;
+}
+

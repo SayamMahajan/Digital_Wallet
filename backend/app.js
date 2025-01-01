@@ -7,6 +7,7 @@ import 'dotenv/config';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import transactionRoutes from './routes/transactionRoutes.js';
+import requestRoutes from './routes/requestRoutes.js';
 
 const app = express();
 
@@ -28,6 +29,7 @@ connectMongo(process.env.MONGO_URL);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/requests', requestRoutes);
 
 
 const PORT = process.env.PORT || 5000;
