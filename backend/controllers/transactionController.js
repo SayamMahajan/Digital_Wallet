@@ -53,7 +53,6 @@ export const createTransaction = async (req, res) => {
   }
 };
 
-// Get list of transactions for a user
 export const getTransactions = async (req, res) => {
   try {
     const userId = req.userId;
@@ -82,7 +81,7 @@ export const getTransactions = async (req, res) => {
   }
 };
 
-const INR_TO_USD_CONVERSION_RATE = 0.012; // Example: 1 INR = 0.012 USD
+const INR_TO_USD_CONVERSION_RATE = 0.012;
 
 export const addDeposit = async (req, res) => {
   try {
@@ -99,7 +98,6 @@ export const addDeposit = async (req, res) => {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    // Convert INR to USD
     const amountInUSD = (numericAmount * INR_TO_USD_CONVERSION_RATE).toFixed(2);
 
     const paymentJson = {
@@ -112,7 +110,7 @@ export const addDeposit = async (req, res) => {
       transactions: [{
         amount: {
           total: amountInUSD,
-          currency: 'USD', // Use supported currency
+          currency: 'USD', 
         },
         description: `Deposit of ₹${numericAmount.toFixed(2)} converted to USD`,
       }],
@@ -156,7 +154,6 @@ export const handlePaymentSuccess = async (req, res) => {
           return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        // Convert USD back to INR for user's wallet balance
         const amountInUSD = parseFloat(payment.transactions[0].amount.total);
         const amountInINR = (amountInUSD / INR_TO_USD_CONVERSION_RATE).toFixed(2);
 

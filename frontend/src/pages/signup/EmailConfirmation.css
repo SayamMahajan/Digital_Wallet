@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #86c6f0; /* Similar to signup */
+  background-color: #86c6f0; 
 }
 
 .split-container {
@@ -71,7 +71,7 @@
   transition: border-color 0.3s;
   color: #000000;
   background-color: #eaf0fe;
-  text-align: center; /* Center-align text for OTP */
+  text-align: center; 
 }
 
 .email-confirmation-container input:focus {

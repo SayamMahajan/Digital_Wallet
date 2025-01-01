@@ -36,7 +36,7 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
     if (paymentId && payerId) {
       const uniqueKey = `${paymentId}-${payerId}`;
       if (!handledPaymentRef.current.has(uniqueKey)) {
-        handledPaymentRef.current.add(uniqueKey); // Mark as processed
+        handledPaymentRef.current.add(uniqueKey); 
         handlePaymentSuccess(paymentId, payerId);
       }
     }
@@ -130,8 +130,8 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
   };
 
   const handlePaypalDeposit = async () => {
-    if (isProcessing) return; // Prevent double clicks
-    setIsProcessing(true); // Set a flag to prevent re-entry
+    if (isProcessing) return; 
+    setIsProcessing(true); 
 
     const cleanedDepositAmount = roundToFiveDecimalPlaces(parseFloat(depositAmount));
 
@@ -276,7 +276,7 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
               value={sendAmount}
               onChange={(e) => setSendAmount(e.target.value)}
               autoComplete="off"
-              maxLength={10} // Max digits allowed
+              maxLength={10} 
             />
             <input
               id="description"
@@ -286,7 +286,7 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
               value={description}
               onChange={handleDescriptionChange}
               autoComplete="off"
-              maxLength={40} // Limit description to 40 characters
+              maxLength={40} 
             />
             <button onClick={handleSendTransaction}>Send</button>
           </div>
@@ -306,7 +306,7 @@ const TransactionContent = ({ transactionData, setTransactionData, users }) => {
               value={depositAmount}
               onChange={(e) => setDepositAmount(e.target.value)}
               autoComplete="off"
-              maxLength={10} // Max digits allowed
+              maxLength={10} 
             />
             {depositAmount > 0 && (
               <button onClick={handlePaypalDeposit}>Proceed with PayPal</button>

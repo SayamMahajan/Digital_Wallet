@@ -6,9 +6,8 @@ import './Sidebar.css';
 
 function Sidebar() {
     const navigate = useNavigate();
-    const location = useLocation(); // Hook to get the current location
+    const location = useLocation(); 
 
-    // Function to determine if a menu item should be active
     const isActive = (path) => location.pathname === path;
 
     const handleLogout = async () => {

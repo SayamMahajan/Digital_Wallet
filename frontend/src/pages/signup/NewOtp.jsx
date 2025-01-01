@@ -30,8 +30,8 @@ const NewOtp = () => {
           <form onSubmit={handleSubmit}>
             <h1>New Verification OTP</h1>
             <input
-              id="new-otp" // Add this line
-              name="new-otp" // Add this line
+              id="new-otp"
+              name="new-otp" 
               type="email"
               placeholder="Enter your email"
               value={email}

@@ -37,8 +37,8 @@ const Signup = () => {
           <form onSubmit={handleSubmit}>
             <h1>Signup</h1>
             <input
-              id="signup-firstname" // Add this line
-              name="firstName" // Add this line
+              id="signup-firstname" 
+              name="firstName" 
               type="text"
               placeholder="Enter your first name"
               value={firstName}
@@ -47,8 +47,8 @@ const Signup = () => {
               autoComplete="firstName"
             />
             <input
-              id="signup-lastname" // Add this line
-              name="lastName" // Add this line
+              id="signup-lastname"
+              name="lastName" 
               type="text"
               placeholder="Enter your last name"
               value={lastName}
@@ -57,8 +57,8 @@ const Signup = () => {
               autoComplete="lastName"
             />
             <input
-              id="signup-email" // Add this line
-              name="email" // Add this line
+              id="signup-email"
+              name="email" 
               type="email"
               placeholder="Enter your email"
               value={email}
@@ -67,8 +67,8 @@ const Signup = () => {
               autoComplete="email"
             />
             <input
-              id="signup-password" // Add this line
-              name="password" // Add this line
+              id="signup-password" 
+              name="password" 
               type="password"
               placeholder="Enter your password"
               value={password}

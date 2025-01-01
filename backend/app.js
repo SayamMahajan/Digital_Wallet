@@ -12,10 +12,10 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173', // The origin of your frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ,'PATCH'], // Allowed methods
-  allowedHeaders: ['Content-Type', 'Authorization', 'withCredentials'], // Explicitly allow withCredentials header
-  credentials: true, // Allow cookies and credentials
+  origin: 'http://localhost:5173', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ,'PATCH'], 
+  allowedHeaders: ['Content-Type', 'Authorization', 'withCredentials'], 
+  credentials: true,
 }));
 app.use(express.json());
 app.use(cookieParser());

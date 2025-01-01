@@ -15,7 +15,7 @@ const EmailConfirmation = () => {
       const response = await axiosInstance.post('/api/auth/verify-email', { otp });
       if (response.data.success) {
         alert('Email verified successfully!');
-        navigate('/login'); // Redirect to login after successful verification
+        navigate('/login'); 
       }
     } catch (error) {
       alert(error.response?.data?.message || 'Invalid OTP. Please try again.');
@@ -43,7 +43,7 @@ const EmailConfirmation = () => {
               onChange={(e) => setOtp(e.target.value)}
               required
               autoComplete="off"
-              pattern="\d{6}" // Ensures only 6 digits are allowed
+              pattern="\d{6}" 
               title="Enter a 6-digit OTP"
             />
             <button type="submit" disabled={loading}>

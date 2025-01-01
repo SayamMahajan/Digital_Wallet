@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom'; // Import useParams
+import { useNavigate, useParams } from 'react-router-dom'; 
 import { axiosInstance } from '../../utils/api.js';
 import './ResetPassword.css';
 
@@ -7,7 +7,7 @@ const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { token } = useParams(); // Get the token from the URL
+  const { token } = useParams(); 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
