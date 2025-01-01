@@ -3,7 +3,7 @@ import { axiosInstance } from '../../utils/api.js';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './TransactionContent.css';
 
-const TransactionContent = ({ transactionData, users }) => {
+const TransactionContent = ({ transactionData, setTransactionData, users }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSendForm, setShowSendForm] = useState(false);
   const [showDepositForm, setShowDepositForm] = useState(false);
@@ -17,6 +17,15 @@ const TransactionContent = ({ transactionData, users }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const handledPaymentRef = useRef(new Set()); // Track processed payments
+
+  const fetchTransactions = async () => {
+    try {
+      const response = await axiosInstance.get('/api/transactions/', { withCredentials: true });
+      setTransactionData(response.data.transactions);
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+    }
+  };
 
   // Handle PayPal success
   useEffect(() => {
@@ -41,6 +50,7 @@ const TransactionContent = ({ transactionData, users }) => {
         { withCredentials: true }
       );
       alert(response.data.message);
+      await fetchTransactions();
       navigate('/transactions');
     } catch (error) {
       alert('Error verifying payment. Please try again.');
@@ -98,6 +108,7 @@ const TransactionContent = ({ transactionData, users }) => {
       setReceiverName(null);
       setErrorMessage('');
       setShowSendForm(false);
+      await fetchTransactions();
     } catch (error) {
       alert('Transaction failed. Please try again.');
     }

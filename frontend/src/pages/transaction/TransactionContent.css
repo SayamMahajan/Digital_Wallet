@@ -304,30 +304,87 @@
   border-color: #3f72af;
 }
 
-@media (max-width: 768px) {
+
+/* Media Query for medium devices (tablets, 600px - 992px) */
+@media (max-width: 992px) {
+  .transaction-content-container {
+    padding: 15px;
+  }
+
   .transaction-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .transaction-h2 {
-    font-size: 1.6rem;
+  .transaction-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
   }
 
   .transaction-buttons button {
-    width: 100%;
-    margin: 5px 0;
+    margin: 5px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
   }
 
-  .transaction-item-label {
-    width: auto;
-  }
-  .search-input {
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-  .deposit-form {
-    width: 90%;
+  .transaction-list .transaction-item {
+    font-size: 14px;
   }
 
+  .deposit-form,
+  .send-form {
+    width: 70%;
+  }
+
+  .deposit-form input,
+  .send-form input {
+    font-size: 15px;
+    padding: 10px;
+  }
+
+  .deposit-form button,
+  .send-form button {
+    font-size: 15px;
+    padding: 10px 15px;
+  }
+}
+
+/* Media Query for large devices (desktops, > 992px) */
+@media (min-width: 992px) {
+  .transaction-content-container {
+    padding: 20px;
+  }
+
+  .transaction-header {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .transaction-buttons button {
+    margin-left: 10px;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .transaction-list .transaction-item {
+    font-size: 15px;
+  }
+
+  .deposit-form,
+  .send-form {
+    width: 400px;
+  }
+
+  .deposit-form input,
+  .send-form input {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .deposit-form button,
+  .send-form button {
+    font-size: 16px;
+    padding: 10px 20px;
+  }
 }

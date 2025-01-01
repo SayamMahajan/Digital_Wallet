@@ -31,7 +31,7 @@ const Transaction = () => {
       <div className="body">
         <HeaderTitle />
         <div className="content">
-        <TransactionContent transactionData={transactionData} users= {usersData}/>
+        <TransactionContent transactionData={transactionData} setTransactionData={setTransactionData} users= {usersData}/>
         </div>
       </div>
     </div>
