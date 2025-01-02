@@ -1,6 +1,7 @@
 import User from '../models/User.js';
 import Transaction from '../models/Transaction.js';
 import paypal from 'paypal-rest-sdk';
+import 'dotenv/config';
 
 paypal.configure({
   mode: 'sandbox', // Use 'live' in production
@@ -104,8 +105,8 @@ export const addDeposit = async (req, res) => {
       intent: 'sale',
       payer: { payment_method: 'paypal' },
       redirect_urls: {
-        return_url: 'http://localhost:5173/transactions',
-        cancel_url: 'http://localhost:5173/transactions',
+        return_url: `${process.env.CLIENT_URL}/transactions`,
+        cancel_url: `${process.env.CLIENT_URL}/transactions`,
       },
       transactions: [{
         amount: {

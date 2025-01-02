@@ -71,7 +71,7 @@ export const sendRequest = async (req, res) => {
 
 export const updateRequestStatus = async (req, res) => {
   try {
-    const { requestId, action, sender_upi_id, receiver_upi_id, amount} = req.body;
+    const { requestId, action, sender_upi_id, receiver_upi_id, amount } = req.body;
 
     if (amount <= 0) {
       return res.status(400).json({ success: false, message: 'Invalid amount' });
@@ -92,36 +92,41 @@ export const updateRequestStatus = async (req, res) => {
     }
 
     const request = await Request.findById(requestId);
-
     if (!request) {
       return res.status(404).json({ success: false, message: 'Request not found' });
     }
 
     if (action === 'accept') {
+      if (receiver.balance < amount) {
+        return res.status(400).json({ success: false, message: 'Insufficient balance in receiver account' });
+      }
+
       request.status = 'Accepted';
+      await request.save();
+
+      sender.balance += amount;
+      receiver.balance -= amount;
+      await sender.save();
+      await receiver.save();
+
+      const transaction = new Transaction({
+        sender_upi_id,
+        receiver_upi_id,
+        amount,
+        description: 'Request Method Used',
+      });
+
+      await transaction.save();
+
+      return res.status(200).json({ success: true, message: 'Request accepted successfully!' });
     } else if (action === 'reject') {
+      // Update request status to 'Rejected'
       request.status = 'Rejected';
+      await request.save();
+
+      return res.status(200).json({ success: true, message: 'Request rejected successfully!' });
     }
-
-    await request.save();
-
-    sender.balance += amount;
-    receiver.balance -= amount;
-
-    await sender.save();
-    await receiver.save();
-
-    const transaction = new Transaction({
-      sender_upi_id,
-      receiver_upi_id,
-      amount,
-      description: 'Request Method Used',
-    });
-
-    await transaction.save();
-
-    return res.status(200).json({ success: true, message: `Request ${action}ed successfully!` });
   } catch (error) {
-    return res.status(500).json({ success: false, message: 'Server error' });
+    return res.status(500).json({ success: false, message: 'Server error', error: error.message });
   }
 };
