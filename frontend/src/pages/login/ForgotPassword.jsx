@@ -12,7 +12,7 @@ const ForgotPassword = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axiosInstance.post('/api/auth/forgot-password', { email });
+      const response = await axiosInstance.post('/api/auth/forget-password', { email });
       alert(response.data.message || 'Password reset link sent');
       navigate('/login');
     } catch (error) {
@@ -27,7 +27,10 @@ const ForgotPassword = () => {
       <div className="split-container">
         <div className="forgot-password-container">
           <form onSubmit={handleSubmit}>
-            <h1>Forgot Password</h1>
+            <div className="logo-header-container">
+              <img src="/images/Logo.png" alt="Website Logo" className="website-logo" />
+              <h1>Forgot Password</h1>
+            </div>
             <input
               id="forgot-password" // Add this line
               name="forgot-password" // Add this line

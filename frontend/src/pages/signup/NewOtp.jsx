@@ -28,7 +28,10 @@ const NewOtp = () => {
         <div className="new-otp-image-container"></div>
         <div className="new-otp-container">
           <form onSubmit={handleSubmit}>
-            <h1>New Verification OTP</h1>
+            <div className="logo-header-container">
+              <img src="/images/Logo.png" alt="Website Logo" className="website-logo" />
+              <h1>New Verification OTP</h1>
+            </div>
             <input
               id="new-otp"
               name="new-otp" 

@@ -31,7 +31,10 @@ const EmailConfirmation = () => {
 
         <div className="email-confirmation-container">
           <form onSubmit={handleSubmit}>
-            <h1>Email Confirmation</h1>
+            <div className="logo-header-container">
+              <img src="/images/Logo.png" alt="Website Logo" className="website-logo" />
+              <h1>Sign Up</h1>
+            </div>
             <p>Enter the 6-digit OTP sent to your email:</p>
             <input
               id="otp"

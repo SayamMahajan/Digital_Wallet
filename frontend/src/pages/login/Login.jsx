@@ -30,7 +30,10 @@ const Login = () => {
       <div className="split-container">
         <div className="login-container">
           <form onSubmit={handleSubmit}>
-            <h1>Login</h1>
+            <div className="logo-header-container">
+              <img src="/images/Logo.png" alt="Website Logo" className="website-logo" />
+              <h1>Login</h1>
+            </div>
             <input
               id="login-email" // Add this line
               name="email" // Add this line

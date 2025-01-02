@@ -25,6 +25,19 @@
   padding: 20px;
 }
 
+.logo-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.website-logo {
+  width: 40px;
+  height: auto;
+  margin-right: 10px;
+}
+
 .login-container form {
   width: 100%;
   max-width: 400px;
@@ -43,7 +56,6 @@
 .login-container h1 {
   font-size: 28px;
   color: #0F4C75;
-  margin-bottom: 60px;
 }
 
 .login-container input {
@@ -120,7 +132,7 @@
   height: auto;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   .split-container {
     flex-direction: column;
     width: 90%;
@@ -128,5 +140,8 @@
   }
   .login-container {
     padding: 15px;
+  }
+  .login-image-container{
+    display: none;
   }
 }

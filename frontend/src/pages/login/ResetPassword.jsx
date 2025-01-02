@@ -33,7 +33,10 @@ const ResetPassword = () => {
       <div className="split-container">
         <div className="reset-password-container">
           <form onSubmit={handleSubmit}>
-            <h1>Reset Password</h1>
+            <div className="logo-header-container">
+              <img src="/images/Logo.png" alt="Website Logo" className="website-logo" />
+              <h1>Reset Password</h1>
+            </div>
             <input
               id="new-reset-password"
               name="new-reset-password"

@@ -48,7 +48,6 @@
 .new-otp-container h1 {
   font-size: 28px;
   color: #0F4C75;
-  margin-bottom: 60px;
 }
 
 .new-otp-container input {
@@ -79,4 +78,10 @@
 .new-otp-container button:hover {
   background-color: #1B262C;
   color: #BBE1FA;
+}
+
+@media (max-width: 850px) {
+  .new-otp-image-container {
+    display: none;
+  }
 }

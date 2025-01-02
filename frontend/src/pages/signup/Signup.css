@@ -50,7 +50,18 @@
 .signup-container h1 {
   font-size: 24px;
   color: #0F4C75; 
-  margin-bottom: 60px;
+}
+.logo-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.website-logo {
+  width: 40px;
+  height: auto;
+  margin-right: 10px;
 }
 
 /* Input fields */
@@ -102,7 +113,7 @@
   color: #1B262C;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   .split-container {
     flex-direction: column;
     width: 90%;
@@ -113,5 +124,8 @@
   }
   .signup-container {
     padding: 15px;
+  }
+  .signup-image-container {
+    display: none;
   }
 }

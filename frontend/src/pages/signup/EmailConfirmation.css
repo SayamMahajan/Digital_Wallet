@@ -50,7 +50,6 @@
 .email-confirmation-container h1 {
   font-size: 24px;
   color: #0F4C75;
-  margin-bottom: 20px;
 }
 
 .email-confirmation-container p {
@@ -94,16 +93,18 @@
   color: #BBE1FA;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 850px) {
   .split-container {
     flex-direction: column;
     width: 90%;
     height: auto;
   }
   .email-confirmation-image-container {
-    height: 300px;
+    display: none;
   }
   .email-confirmation-container {
     padding: 15px;
   }
 }
+
+
