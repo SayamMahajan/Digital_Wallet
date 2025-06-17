@@ -1,32 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
-import axios from 'axios';
+import { useAuth } from '../hooks/useAuth';
+import LoadingSpinner from './ui/LoadingSpinner';
 
 const PrivateRoute = ({ element }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true); 
+  const { isAuthenticated, loading } = useAuth();
 
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/auth/check-auth', {
-      withCredentials: true,
-    })
-      .then(response => {
-        if (response.data.success) {
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-        }
-      })
-      .catch(error => console.error("Error fetching profile data:", error))
-      .finally(() => setLoading(false)); 
-  }, []);
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+      }}>
+        <LoadingSpinner size="large" color="white" />
+      </div>
+    );
+  }
 
-  if (loading) return <div>Loading...</div>;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
 
-
-  if (!isAuthenticated) return <Navigate to="/login" />;
-
-  return element;  
+  return element;
 };
 
 export default PrivateRoute;

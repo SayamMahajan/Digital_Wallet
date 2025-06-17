@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { axiosInstance } from '../../utils/api.js';
-import Sidebar from '../../components/Sidebar';
-import './Home.css';
-import HeaderTitle from '../../components/HeaderTitle';
-import HomeCentent from './HomeContent';
+import { useApi } from '../../hooks/useApi';
+import Layout from '../../components/layout/Layout';
+import HomeContent from './HomeContent';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
 const Home = () => {
   const [userData, setUserData] = useState(null);
+  const api = useApi();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axiosInstance.get('/api/users/profile', { withCredentials: true });
-        setUserData(response.data.user);
+        const response = await api.get('/api/users/profile');
+        setUserData(response.user);
       } catch (error) {
         console.error('Error fetching profile data:', error);
       }
@@ -21,22 +21,25 @@ const Home = () => {
     fetchUserData();
   }, []);
 
-  if (!userData) {
-    return <div>Loading...</div>;
+  if (api.loading || !userData) {
+    return (
+      <Layout>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          height: '400px' 
+        }}>
+          <LoadingSpinner size="large" color="white" />
+        </div>
+      </Layout>
+    );
   }
 
   return (
-    <div className="layout">
-      <div className='sidebar'>
-        <Sidebar />
-      </div>
-      <div className="body">
-        <HeaderTitle />
-        <div className="content">
-        <HomeCentent users = {userData}/>
-        </div>
-      </div>
-    </div>
+    <Layout>
+      <HomeContent users={userData} />
+    </Layout>
   );
 };
 

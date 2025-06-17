@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { axiosInstance } from '../../utils/api.js';
-import Sidebar from '../../components/Sidebar';
-import './Transaction.css';
-import HeaderTitle from '../../components/HeaderTitle.jsx';
-import TransactionContent from './TransactionContent.jsx';
+import { useApi } from '../../hooks/useApi';
+import Layout from '../../components/layout/Layout';
+import TransactionContent from './TransactionContent';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
 const Transaction = () => {
   const [transactionData, setTransactionData] = useState(null);
   const [usersData, setUsersData] = useState(null);
+  const api = useApi();
 
   useEffect(() => {
     const fetchTransactionData = async () => {
       try {
-        const response = await axiosInstance.get('/api/transactions/', { withCredentials: true });
-        setTransactionData(response.data.transactions);
-        setUsersData(response.data.user);
+        const response = await api.get('/api/transactions/');
+        setTransactionData(response.transactions);
+        setUsersData(response.user);
       } catch (error) {
         console.error('Error fetching transaction data:', error);
       }
@@ -22,19 +22,30 @@ const Transaction = () => {
 
     fetchTransactionData();
   }, []);
+
+  if (api.loading || !transactionData || !usersData) {
+    return (
+      <Layout>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          height: '400px' 
+        }}>
+          <LoadingSpinner size="large" color="white" />
+        </div>
+      </Layout>
+    );
+  }
   
   return (
-    <div className="layout">
-      <div className='sidebar'>
-        <Sidebar />
-      </div>
-      <div className="body">
-        <HeaderTitle />
-        <div className="content">
-        <TransactionContent transactionData={transactionData} setTransactionData={setTransactionData} users= {usersData}/>
-        </div>
-      </div>
-    </div>
+    <Layout>
+      <TransactionContent 
+        transactionData={transactionData} 
+        setTransactionData={setTransactionData} 
+        users={usersData}
+      />
+    </Layout>
   );
 };
 
